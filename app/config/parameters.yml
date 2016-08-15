@@ -10,3 +10,5 @@ parameters:
     mailer_user: null
     mailer_password: null
     secret: b6876dcf80add00424ddb4c4619b43e7c937646e
+    gos_web_socket.server.port: 8080
+    gos_web_socket.server.host: 192.168.0.110

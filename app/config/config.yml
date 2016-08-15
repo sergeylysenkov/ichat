@@ -76,9 +76,8 @@ fos_rest:
 # Web Socket Configuration
 gos_web_socket:
     server:
-        port: 8080        #The port the socket server will listen on
-#        host: 127.0.0.1   #The host ip to bind to
-        host: 192.168.0.110   #The host ip to bind to
+        port: "%gos_web_socket.server.port%"        #The port the socket server will listen on
+        host: "%gos_web_socket.server.host%"   #The host ip to bind to
         router:
             resources:
                 - '@AppBundle/Resources/config/pubsub/routing.yml'
