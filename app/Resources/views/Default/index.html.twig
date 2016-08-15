@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    Homepage.
+    <br/>
+    <label for="roomId">room:</label><input id="roomId" type="text" value="habrchat"/>
+    <label for="countUsers">count users:</label><input id="countUsers" type="text" readonly/>
+    <br/>
+    <label for="sendText">send text:</label><input id="sendText" type="text"/>
+    <br>
+    <label for="chatBox">chat in room:</label><textarea id="chatBox" readonly></textarea>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.0.js"></script>
+    <script type="text/javascript" src="{{ asset('bundles/goswebsocket/js/gos_web_socket_client.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/goswebsocket/js/vendor/autobahn.min.js') }}"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            var room = $("#roomId").val();
+            // Your code here.
+
+        });
+        var room = $("#roomId").val();
+
+        var _WS_URI = "ws://{{ gos_web_socket_server_host }}:{{ gos_web_socket_server_port }}";
+        var chatBox = $("#chatBox");
+        console.log("room = ", room);
+        var webSocket = WS.connect(_WS_URI);
+        webSocket.on("socket/connect", function (session) {
+            //session is an Autobahn JS WAMP session.
+            console.log("Successfully Connected!");
+
+            session.subscribe("app/chat/habrchat/2", function (uri, payload) {
+                console.log("Received message", payload.msg);
+                chatBox.append(payload.msg+'\n');
+            });
+
+            session.publish("app/chat/habrchat/2", "Привет, я пришел от клиента!!!");
+        });
+
+        webSocket.on("socket/disconnect", function (error) {
+            //error provides us with some insight into the disconnection: error.reason and error.code
+            console.log("Disconnected for " + error.reason + " with code " + error.code);
+        });
+    </script>
+{% endblock %}

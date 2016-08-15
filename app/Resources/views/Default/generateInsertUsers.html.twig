@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    INSERT INTO user (first_name, last_name, username, email) VALUES
+    <br>
+    {% for i in 1..1000000 %}
+        ('firstName_{{ i }}', 'lastName_{{ i }}', 'username_{{ i }}', 'email_{{ i }}@email.com'),<br>
+    {% endfor %}
+{% endblock %}
