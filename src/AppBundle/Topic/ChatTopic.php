@@ -85,13 +85,11 @@ class ChatTopic implements TopicInterface, TopicPeriodicTimerInterface
 
     public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
     {
-        $room = $request->getAttributes()->get('room');
-        $userId = $request->getAttributes()->get('user_id');
+        if (is_array($event) && array_key_exists("body", $event) && is_array($event["body"])) {
+            $event["body"]["date"] = date_create()->getTimestamp();
+        }
         var_dump($event);
-        $topic->broadcast([
-//            'msg' => 'В комнату ' . $room . ' пользователю ' . $userId . ' поступило сообщение: ' . $event,
-            'msg' => $event
-        ]);
+        $topic->broadcast(['msg' => $event]);
     }
 
     public function getName()
