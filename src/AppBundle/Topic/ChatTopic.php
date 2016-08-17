@@ -69,8 +69,18 @@ class ChatTopic implements TopicInterface, TopicPeriodicTimerInterface
         $room = $request->getAttributes()->get('room');
         $userId = $request->getAttributes()->get('user_id');
 
+        $str = 'Новый пользователь вышел из комнаты ' . $room . ' лички с пользователем ' . $userId;
+
+        $arr = [
+            "type" => "message:service",
+            "body" => [
+                "message" => $str,
+                "date" => date_create()->getTimestamp()
+            ],
+            "version" => "1.0.0"];
+
         //this will broadcast the message to ALL subscribers of this topic.
-        $topic->broadcast(['msg' => 'Новый пользователь вышел из комнаты ' . $room . ' лички с пользователем ' . $userId]);
+        $topic->broadcast(['msg' => $arr]);
     }
 
     public function onPublish(ConnectionInterface $connection, Topic $topic, WampRequest $request, $event, array $exclude, array $eligible)
